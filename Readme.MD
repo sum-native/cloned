@@ -153,9 +153,9 @@ kubectl apply -f ./k8s/cloud-watch/cwagent-configmap.yaml
 ```
 
 deploy the cloud watch agent
-```
-kubectl apply -f ./k8s/cloud-watch/cwagent-daemonset.yaml
 ```PS
+kubectl apply -f ./k8s/cloud-watch/cwagent-daemonset.yaml
+```
 
 Run the beow command to check the daemon set is installed correctly
 ```PS
