@@ -89,7 +89,7 @@ If external services are already configured skip this step and proceed to deploy
 ```PS
 kubectl apply -f ./k8s/external/
 
-```PS
+```
 
 Use the below script to wait until the deployment of the external services to be completed.
 
@@ -107,8 +107,8 @@ kubectl apply -f ./k8s/init/
 Wait for init jobs to finish using the below commands
 
 ```PS
-kubectl wait --for=condition=Complete job.batch/solr-init --timeout=600s `
-kubectl wait --for=condition=Complete job.batch/mssql-init --timeout=600s `
+kubectl wait --for=condition=Complete job.batch/solr-init --timeout=600s 
+kubectl wait --for=condition=Complete job.batch/mssql-init --timeout=600s 
 ```
 If the jobs fail to run, you can use the `kubectl describe pod <pod-name>` which should describe the events that have occurred and might shed some light on the issues.
 
