@@ -157,7 +157,7 @@ deploy the cloud watch agent
 kubectl apply -f ./k8s/cloud-watch/cwagent-daemonset.yaml
 ```
 
-Run the beow command to check the daemon set is installed correctly
+Run the below command to check the daemon set is installed correctly
 ```PS
 kubectl get pods -n amazon-cloudwatch
 ```
