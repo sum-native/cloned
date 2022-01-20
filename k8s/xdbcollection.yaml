@@ -30,7 +30,7 @@ spec:
         group: sitecoredelivery
       containers:
       - name: sitecore-xp1-xdbcollection
-        image: scr.sitecore.com/sxp/sitecore-xp1-xdbcollection:10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-xdbcollection
         ports:
         - containerPort: 80
         env:
