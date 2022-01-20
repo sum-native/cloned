@@ -31,7 +31,7 @@ spec:
         group: sitecoremanagement
       containers:
       - name: sitecore-xp1-id
-        image: scr.sitecore.com/sxp/sitecore-id:10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/id
         ports:
         - containerPort: 80
         env:
