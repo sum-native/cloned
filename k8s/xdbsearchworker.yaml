@@ -30,7 +30,7 @@ spec:
         group: sitecoreprocessing
       containers:
       - name: sitecore-xp1-xdbsearchworker
-        image: scr.sitecore.com/sxp/sitecore-xp1-xdbsearchworker:10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-xdbsearchworker
         env:
         - name: Database_Server
           valueFrom:
