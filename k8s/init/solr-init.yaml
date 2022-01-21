@@ -12,7 +12,7 @@ spec:
         group: data
       containers:
       - name: solr-init
-        image: scr.sitecore.com/sxp/sitecore-xp1-solr-init:10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-solr-init:latest
         env:
         - name: SITECORE_SOLR_CONNECTION_STRING
           valueFrom:
