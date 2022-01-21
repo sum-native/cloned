@@ -63,4 +63,4 @@ Set-Content -Path ".\k8s\secrets\sitecore-telerikencryptionkey.txt" -Value (Get-
 Set-Content -Path ".\k8s\secrets\sitecore-identitysecret.txt" -Value (Get-SitecoreRandomString 64 -DisallowSpecial) -NoNewline
 
 Write-Host 'Extracting sitecore license..'
-Set-Content -Path ".\k8s\secrets\sitecore-license.txt" -Value (ConvertTo-CompressedBase64String -Path "C:\License\license.xml") -NoNewline
+Set-Content -Path ".\k8s\secrets\sitecore-license.txt" -Value (ConvertTo-CompressedBase64String -Path "C:\Users\sumanth\sitecore-aws-eks\license-sc.xml") -NoNewline
