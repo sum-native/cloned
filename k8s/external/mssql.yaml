@@ -30,7 +30,7 @@ spec:
         group: data
       containers:
       - name: mssql
-        image: scr.sitecore.com/sxp/nonproduction/mssql-developer:2017-10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/mssql:latest
         ports:
         - containerPort: 1433
         env:
