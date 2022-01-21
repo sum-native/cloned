@@ -30,7 +30,7 @@ spec:
         group: data
       containers:
       - name: solr
-        image: scr.sitecore.com/sxp/nonproduction/solr:8.4.0-10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/solr:latest
         ports:
         - containerPort: 8983
         env:
