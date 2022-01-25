@@ -3,7 +3,7 @@ env:
   parameter-store:
     AWS_ACCESS_KEY_ID: access_key
     AWS_SECRET_ACCESS_KEY: secret_key
-    AWS_REGION: region
+    AWS_DEFAULT_REGION: region
   
 phases:
 
@@ -11,6 +11,10 @@ phases:
     commands:
       - aws sts get-caller-identity
       - aws configure list
+      - echo y | Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      - echo y | choco install kubernetes-cli
+      - choco install -y eksctl 
+      - msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
   pre_build:
     commands:
       - echo Logging in to Amazon EKS...
