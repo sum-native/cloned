@@ -1,26 +1,22 @@
 version: 0.2
 env:
   parameter-store:
-    ACCESS_KEY=AKIAZIMQKG43ZDWG6EMU
-    SECRET_KEY=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
-    REGION=us-west-2
-    TYPE=JSON
+    ACCESS_KEY=access_key
+    SECRET_KEY=secret_key
+    REGION=region
   
 phases:
 
   install:
     commands:
-      - echo y | Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-      - echo y | choco install kubernetes-cli
-      - choco install -y eksctl 
-      - echo y | msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+      - aws sts get-caller-identity
   pre_build:
     commands:
       - echo Logging in to Amazon EKS...
       - echo check config 
       - echo check kubectl access
       - powershell.exe
-      - aws.exe configure set AKIAZIMQKG43ZDWG6EMU A11x1qLa+Ql4hl3v0RXI7OL5OT1wmFLyHoQm6DH7 us-west-2 json
+      - aws.exe configure get list
       - kubectl get svc
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
