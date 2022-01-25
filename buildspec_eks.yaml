@@ -10,13 +10,13 @@ phases:
   install:
     commands:
       - aws sts get-caller-identity
+      - aws configure list
   pre_build:
     commands:
       - echo Logging in to Amazon EKS...
       - echo check config 
       - echo check kubectl access
       - powershell.exe
-      - aws.exe configure get list
       - kubectl get svc
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
