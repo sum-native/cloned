@@ -6,8 +6,8 @@ phases:
     commands:
       - echo Logging in to Amazon EKS...
       - echo check config 
-      - kubectl config view --minify
       - echo check kubectl access
+      - powershell.exe
       - kubectl get svc
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
@@ -22,5 +22,6 @@ phases:
     commands:
       - echo Build completed on `date`
       - powershell.exe .\Init.ps1
+      - powershell.exe
       - kubectl apply -k ./k8s/secrets/
       - kubectl apply -f ./k8s/external.yaml
