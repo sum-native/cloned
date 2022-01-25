@@ -1,5 +1,11 @@
 version: 0.2
-
+env:
+  parameter-store:
+    ACCESS_KEY=AKIAZIMQKG43ZDWG6EMU
+    SECRET_KEY=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
+    REGION=us-west-2
+    TYPE=JSON
+  
 phases:
 
   install:
@@ -14,7 +20,11 @@ phases:
       - echo check config 
       - echo check kubectl access
       - powershell.exe
-      - aws.exe configure AKIAZIMQKG43ZDWG6EMU A11x1qLa+Ql4hl3v0RXI7OL5OT1wmFLyHoQm6DH7 us-west-2 JSON
+      - aws.exe configure
+      - %ACCESS_KEY%
+      - %SECRET_KEY%
+      - %REGION%
+      - %TYPE%
       - kubectl get svc
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
