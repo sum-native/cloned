@@ -35,4 +35,4 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - kubectl apply -f ./k8s/external.yaml
+      - kubectl apply -f /k8s/external.yaml
