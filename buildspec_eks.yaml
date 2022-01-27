@@ -17,6 +17,7 @@ phases:
       - msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
   pre_build:
     commands:
+      - eksctl utils write-kubeconfig --name=sitecoreeks --kubeconfig=%UserProfile%/.kube/config
       - echo Logging in to Amazon EKS...
       - echo check config 
       - echo check kubectl access
