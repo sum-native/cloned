@@ -35,4 +35,5 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - kubectl apply -f ./k8s/external/
+      - kubectl apply -k ./k8s/secrets/ --kubeconfig=~/.kube/config
+      - kubectl apply -f ./k8s/external/ --kubeconfig=~/.kube/config
