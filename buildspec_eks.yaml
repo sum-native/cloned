@@ -23,8 +23,8 @@ phases:
       - echo check config 
       - echo check kubectl access
       - powershell.exe
-      - kubectl version
-      - kubectl get nodes
+      - kubectl version --kubeconfig=%UserProfile%/.kube/config
+      - kubectl get nodes --kubeconfig=%UserProfile%/.kube/config
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
       
