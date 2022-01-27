@@ -1,0 +1,39 @@
+version: 0.2
+env:
+  parameter-store:
+    AWS_ACCESS_KEY_ID: access_key
+    AWS_SECRET_ACCESS_KEY: secret_key
+    AWS_DEFAULT_REGION: region
+  
+phases:
+
+  install:
+    commands:
+      - pip install --upgrade awscli==1.18.17
+      - echo logging to ECR
+      - aws --version
+      - aws configure list
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  pre_build:
+    commands:
+      - eksctl utils write-kubeconfig --cluster=sitecoreeks --kubeconfig=~/.kube/config
+      - eksctl get cluster
+      - echo Logging in to Amazon EKS...
+      - echo check config 
+      - echo check kubectl access
+      - kubectl version --kubeconfig=~/.kube/config
+      - kubectl get nodes --kubeconfig=~/.kube/config
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
+      
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Pulling the Docker image...          
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - kubectl apply -k ./k8s/secrets/
+      - kubectl apply -f ./k8s/external.yaml
