@@ -18,11 +18,13 @@ phases:
   pre_build:
     commands:
       - eksctl utils write-kubeconfig --name=sitecoreeks --kubeconfig=%UserProfile%/.kube/config
+      - eksctl get cluster
       - echo Logging in to Amazon EKS...
       - echo check config 
       - echo check kubectl access
       - powershell.exe
-      - kubectl get svc
+      - kubectl --version
+      - kubectl get nodes
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
       
