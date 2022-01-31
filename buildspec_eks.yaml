@@ -39,3 +39,4 @@ phases:
       - kubectl apply -k ./k8s/secrets/ --kubeconfig=~/.kube/config
       - kubectl apply -f ./k8s/external/ --kubeconfig=~/.kube/config
       - kubectl apply -f ./k8s/init/ --kubeconfig=~/.kube/config
+      - kubectl apply -f ./k8s/ --kubeconfig=~/.kube/config
