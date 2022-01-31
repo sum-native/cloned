@@ -22,6 +22,7 @@ phases:
       - echo check config 
       - echo check kubectl access
       - kubectl version --kubeconfig=~/.kube/config
+      - kubectl get pods --kubeconfig=~/.kube/config
       - kubectl get nodes --kubeconfig=~/.kube/config
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 636494690103.dkr.ecr.us-west-2.amazonaws.com
@@ -37,4 +38,4 @@ phases:
       - echo Build completed on `date`
       - kubectl apply -k ./k8s/secrets/ --kubeconfig=~/.kube/config
       - kubectl apply -f ./k8s/external/ --kubeconfig=~/.kube/config
-      - kubectl delete -f ./k8s/init/ --kubeconfig=~/.kube/config
+      - kubectl apply -f ./k8s/init/ --kubeconfig=~/.kube/config
