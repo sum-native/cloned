@@ -30,7 +30,7 @@ spec:
         group: sitecoreprocessing
       containers:
       - name: sitecore-xp1-cortexprocessing
-        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cortexprocessing:latest
+        image: scr.sitecore.com/sxp/sitecore-xp1-cortexprocessing:10.0.0-ltsc2019
         ports:
         - containerPort: 80
         env:
