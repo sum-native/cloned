@@ -44,7 +44,7 @@ spec:
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbrefdata/healthz/ready).StatusCode -eq 200} catch { $false }));"]
       containers:
       - name: sitecore-xp1-cd
-        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cd:v1
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cd:original
         ports:
         - containerPort: 80
         env:
