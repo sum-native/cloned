@@ -43,7 +43,7 @@ spec:
           image: mcr.microsoft.com/powershell:lts-nanoserver-1809
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbrefdata/healthz/ready).StatusCode -eq 200} catch { $false }));"]
       containers:
-      - name: sitecore-xp1-cd
+      - name: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cd
         image: sumanthc/cd:latest
         ports:
         - containerPort: 80
