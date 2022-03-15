@@ -8,7 +8,6 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -43,8 +42,8 @@ spec:
           image: mcr.microsoft.com/powershell:lts-nanoserver-1809
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbrefdata/healthz/ready).StatusCode -eq 200} catch { $false }));"]
       containers:
-      - name: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cd
-        image: sumanthc/cd:latest
+      - name: sitecore-xp1-cd
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cd
         ports:
         - containerPort: 80
         env:
@@ -62,11 +61,6 @@ spec:
             secretKeyRef:
               name: sitecore-database
               key: sitecore-core-database-username.txt
-        - name: Mail_Password
-          valueFrom:
-            secretKeyRef:
-              name: smtp-admin
-              key: sitecore-smtppassword.txt
         - name: Core_Database_Password
           valueFrom:
             secretKeyRef:
