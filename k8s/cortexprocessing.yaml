@@ -27,7 +27,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoreprocessing
       containers:
       - name: sitecore-xp1-cortexprocessing
         image: scr.sitecore.com/sxp/sitecore-xp1-cortexprocessing:10.0.0-ltsc2019
@@ -39,6 +38,16 @@ spec:
             secretKeyRef:
               name: sitecore-database
               key: sitecore-databaseservername.txt
+        - name: Processing_Engine_Tasks_Database_Username
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-database
+              key: sitecore-processing-engine-tasks-database-username.txt
+        - name: Processing_Engine_Tasks_Database_Password
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-database
+              key: sitecore-processing-engine-tasks-database-password.txt
         - name: Processing_Engine_Storage_Database_Username
           valueFrom:
             secretKeyRef:
@@ -56,6 +65,8 @@ spec:
               key: sitecore-license.txt
         - name: Sitecore_ConnectionStrings_Processing.Engine.Storage
           value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Processing.Engine.Storage;User ID=$(Processing_Engine_Storage_Database_Username);Password=$(Processing_Engine_Storage_Database_Password);
+        - name: Sitecore_ConnectionStrings_Processing.Engine.Tasks
+          value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Processing.Engine.Tasks;User ID=$(Processing_Engine_Tasks_Database_Username);Password=$(Processing_Engine_Tasks_Database_Password);
         livenessProbe:
           httpGet:
             path: /healthz/live
@@ -76,5 +87,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 100m
+          limits:
+            memory: 1Gi
+            cpu: 300m
       imagePullSecrets:
       - name: sitecore-docker-registry
