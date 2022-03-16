@@ -27,7 +27,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoremanagement
       initContainers:
         - name: wait-xdbcollection
           image: mcr.microsoft.com/powershell:lts-nanoserver-1809
@@ -38,6 +37,9 @@ spec:
         - name: wait-cortexreporting
           image: mcr.microsoft.com/powershell:lts-nanoserver-1809
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://cortexreporting/healthz/ready).StatusCode -eq 200} catch { $false }));"]
+        - name: wait-cortexprocessing
+          image: mcr.microsoft.com/powershell:lts-nanoserver-1809
+          command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://cortexprocessing/healthz/ready).StatusCode -eq 200} catch { $false }));"]
         - name: wait-xdbautomation
           image: mcr.microsoft.com/powershell:lts-nanoserver-1809
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbautomation/healthz/ready).StatusCode -eq 200} catch { $false }));"]
@@ -49,7 +51,7 @@ spec:
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbrefdata/healthz/ready).StatusCode -eq 200} catch { $false }));"]
       containers:
       - name: sitecore-xp1-cm
-        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cm
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cm:latest
         ports:
         - containerPort: 80
         env:
@@ -192,6 +194,8 @@ spec:
           value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Reporting;User ID=$(Reporting_Database_Username);Password=$(Reporting_Database_Password);
         - name: Sitecore_ConnectionStrings_Sitecore.Reporting.Client
           value: http://cortexreporting
+        - name: Sitecore_ConnectionStrings_Cortex.Processing.Engine
+          value: http://cortexprocessing
         - name: Sitecore_ConnectionStrings_Solr.Search
           valueFrom:
             secretKeyRef:
@@ -207,22 +211,28 @@ spec:
           value: http://xdbautomationrpt
         - name: Sitecore_ConnectionStrings_Xdb.ReferenceData.Client
           value: http://xdbrefdata
-        - name: Sitecore_Reporting_Service_Url
-          value: http://rep
         - name: Sitecore_Processing_Service_Url
           value: http://prc
-        - name: Sitecore_Reporting_Service_Require_Https
-          value: 'false'
         - name: Sitecore_Processing_Service_Require_Https
           value: 'false'
         - name: Sitecore_Identity_Server_Authority
-          value: https://id.globalhost
+          value: https://$(id-hostname)
         - name: Sitecore_Identity_Server_CallbackAuthority
-          value: https://cm.globalhost
+          value: https://$(cm-hostname)
         - name: Sitecore_Identity_Server_InternalAuthority
           value: http://id
         - name: Sitecore_Identity_Server_Require_Https
           value: "false"
+        - name: SOLR_CORE_PREFIX_NAME
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-solr
+              key: sitecore-solr-core-prefix-name.txt
+        - name: MEDIA_REQUEST_PROTECTION_SHARED_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-protect-media-requests
+              key: sitecore-media-request-protection-shared-secret.txt
         livenessProbe:
           httpGet:
             path: /healthz/live
@@ -243,5 +253,20 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        volumeMounts:
+        - mountPath: C:\inetpub\wwwroot\App_Data\logs
+          name: logs
+          subPath: cm
+        resources:
+          requests:
+            memory: 800Mi
+            cpu: 1000m
+          limits:
+            memory: 3Gi
+            cpu: 2000m
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs
       imagePullSecrets:
       - name: sitecore-docker-registry
