@@ -15,7 +15,6 @@ metadata:
   name: id
   labels:
     app: id
-    version: "2"
 spec:
   replicas: 1
   selector:
@@ -28,7 +27,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoremanagement
       containers:
       - name: sitecore-xp1-id
         image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/id
@@ -73,11 +71,11 @@ spec:
         - name: Sitecore_Sitecore__IdentityServer__SitecoreMemberShipOptions__ConnectionString
           value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Core;User ID=$(Core_Database_Username);Password=$(Core_Database_Password);
         - name: Sitecore_Sitecore__IdentityServer__AccountOptions__PasswordRecoveryUrl
-          value: https://cm.globalhost/sitecore/login?rc=1
+          value: https://$(cm-hostname)/sitecore/login?rc=1
         - name: Sitecore_Sitecore__IdentityServer__Clients__DefaultClient__AllowedCorsOrigins__AllowedCorsOriginsGroup1
-          value: https://cm.globalhost
+          value: https://$(cm-hostname)
         - name: Sitecore_Sitecore__IdentityServer__PublicOrigin
-          value: https://id.globalhost
+          value: https://$(id-hostname)
         livenessProbe:
           httpGet:
             path: /healthz/live
@@ -98,5 +96,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 400Mi
+            cpu: 50m
+          limits:
+            memory: 1Gi
+            cpu: 200m
       imagePullSecrets:
       - name: sitecore-docker-registry
