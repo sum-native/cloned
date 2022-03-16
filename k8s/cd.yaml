@@ -27,7 +27,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoredelivery
       initContainers:
         - name: wait-xdbcollection
           image: mcr.microsoft.com/powershell:lts-nanoserver-1809
@@ -43,7 +42,7 @@ spec:
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbrefdata/healthz/ready).StatusCode -eq 200} catch { $false }));"]
       containers:
       - name: sitecore-xp1-cd
-        image: scr.sitecore.com/sxp/sitecore-xp1-cd:10.0.0-ltsc2019
+        image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/sitecore-xp1-cd
         ports:
         - containerPort: 80
         env:
@@ -136,6 +135,18 @@ spec:
           value: http://xdbrefdata
         - name: Sitecore_ConnectionStrings_Redis.Sessions
           value: redis:6379,ssl=False,abortConnect=False
+        - name: Sitecore_Analytics_Forwarded_Request_Http_Header
+          value: X-Forwarded-For
+        - name: SOLR_CORE_PREFIX_NAME
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-solr
+              key: sitecore-solr-core-prefix-name.txt
+        - name: MEDIA_REQUEST_PROTECTION_SHARED_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-protect-media-requests
+              key: sitecore-media-request-protection-shared-secret.txt
         livenessProbe:
           httpGet:
             path: /healthz/live
@@ -156,5 +167,25 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        volumeMounts:
+        - mountPath: C:\inetpub\wwwroot\App_Data\Submit Queue
+          name: submit-queue
+        - mountPath: C:\inetpub\wwwroot\App_Data\logs
+          name: logs
+          subPath: cd
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: 1000m
+          limits:
+            memory: 3Gi
+            cpu: 2000m
+      volumes:
+      - name: submit-queue
+        persistentVolumeClaim:
+          claimName: submit-queue
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs
       imagePullSecrets:
       - name: sitecore-docker-registry
