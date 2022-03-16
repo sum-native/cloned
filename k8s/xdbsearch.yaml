@@ -27,7 +27,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoreprocessing
       containers:
       - name: sitecore-xp1-xdbsearch
         image: scr.sitecore.com/sxp/sitecore-xp1-xdbsearch:10.0.0-ltsc2019
@@ -79,6 +78,16 @@ spec:
             secretKeyRef:
               name: sitecore-database
               key: sitecore-processing-pools-database-password.txt
+        - name: Reference_Data_Database_Username
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-database
+              key: sitecore-reference-data-database-username.txt
+        - name: Reference_Data_Database_Password
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-database
+              key: sitecore-reference-data-database-password.txt     
         - name: Sitecore_License
           valueFrom:
             secretKeyRef:
@@ -92,6 +101,8 @@ spec:
           value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Processing.pools;User ID=$(Processing_Pools_Database_Username);Password=$(Processing_Pools_Database_Password);
         - name: Sitecore_ConnectionStrings_Collection
           value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Xdb.Collection.ShardMapManager;User ID=$(Collection_ShardMapManager_Database_Username);Password=$(Collection_ShardMapManager_Database_Password);
+        - name: Sitecore_ConnectionStrings_Xdb.Referencedata
+          value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Referencedata;User ID=$(Reference_Data_Database_Username);Password=$(Reference_Data_Database_Password);
         - name: Sitecore_ConnectionStrings_SolrCore
           valueFrom:
             secretKeyRef:
@@ -121,5 +132,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 150m
+          limits:
+            memory: 1Gi
+            cpu: 350m
       imagePullSecrets:
       - name: sitecore-docker-registry
