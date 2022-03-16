@@ -27,7 +27,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoredelivery
       containers:
       - name: sitecore-xp1-xdbrefdata
         image: 197804015172.dkr.ecr.us-east-1.amazonaws.com/xdbrefdata
@@ -76,5 +75,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 150m
+          limits:
+            memory: 1Gi
+            cpu: 350m
       imagePullSecrets:
       - name: sitecore-docker-registry
