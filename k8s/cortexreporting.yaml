@@ -27,10 +27,9 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: windows
-        group: sitecoreprocessing
       containers:
       - name: sitecore-xp1-cortexreporting
-        image: scr.sitecore.com/sxp/sitecore-xp1-cortexreporting:10.0.0-ltsc2019
+        image: sitecore-xp1-cortexreporting
         ports:
         - containerPort: 80
         env:
@@ -76,5 +75,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 100m
+          limits:
+            memory: 1Gi
+            cpu: 300m
       imagePullSecrets:
       - name: sitecore-docker-registry
